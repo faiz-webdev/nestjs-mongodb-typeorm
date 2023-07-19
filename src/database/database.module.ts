@@ -1,39 +1,75 @@
-import { Module } from '@nestjs/common';
+import { Module, DynamicModule, NotImplementedException } from '@nestjs/common';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { ConfigDBData } from 'src/config/config.interface';
-import { ConfigModule } from 'src/config/config.module';
-import { ConfigService } from 'src/config/config.service';
+import { ConfigDBData } from '../config/config.interface';
+import { ConfigModule } from '../config/config.module';
+import { ConfigService } from '../config/config.service';
+import { DbConfig } from './db.interface';
+import { DbConfigError } from './db.error';
 
 @Module({})
 export class DatabaseModule {
-  public static forRoot() {
+  public static getConnectionOptions(
+    config: ConfigService,
+    dbconfig: DbConfig,
+  ): TypeOrmModuleOptions {
+    const dbdata = config.get().db;
+    console.log(config);
+    let connectionOptions: TypeOrmModuleOptions;
+
+    if (!dbdata) {
+      throw new DbConfigError('Database config is missing');
+    }
+    switch (dbdata.type) {
+      case 'mysql':
+        connectionOptions = this.getConnectionOptionsMysql(dbdata);
+        break;
+      default:
+        throw new NotImplementedException(
+          `Database type '${dbdata.type}' not supported`,
+        );
+    }
+    return {
+      ...connectionOptions,
+      entities: dbconfig.entities,
+      logging: true,
+    };
+  }
+  private static getConnectionOptionsSqlite(dbdata: any): TypeOrmModuleOptions {
+    throw new NotImplementedException(
+      `Database type '${dbdata.type}' not supported`,
+    );
+  }
+  private static getConnectionOptionsMysql(
+    dbdata: ConfigDBData,
+  ): TypeOrmModuleOptions {
+    return {
+      type: 'mysql',
+      host: dbdata.host,
+      port: dbdata.port,
+      username: dbdata.user,
+      password: dbdata.pass,
+      database: dbdata.name,
+      charset: dbdata.charset,
+      extra: {
+        collate: dbdata.collate,
+        dialect: dbdata.dialect,
+      },
+    };
+  }
+  public static forRoot(dbconfig: DbConfig): DynamicModule {
     return {
       module: DatabaseModule,
       imports: [
         TypeOrmModule.forRootAsync({
           imports: [ConfigModule],
-          useFactory: (configService: ConfigService) => {
-            return DatabaseModule.getConnection(configService);
-          },
+          useFactory: (configService: ConfigService) =>
+            DatabaseModule.getConnectionOptions(configService, dbconfig),
+          inject: [ConfigService],
         }),
       ],
-    };
-  }
-
-  static getConnection(configService: ConfigService) {
-    const dbData = configService.get().db;
-    let connectionOpn: TypeOrmModuleOptions;
-
-    if (dbData) {
-      return this.getMysqlDBConfig(dbData);
-    }
-  }
-
-  static getMysqlDBConfig(dbData: ConfigDBData): TypeOrmModuleOptions {
-    return {
-      type: dbData.type,
-      port: dbData.port,
-      host: dbData.host,
+      controllers: [],
+      providers: [],
+      exports: [],
     };
   }
 }
