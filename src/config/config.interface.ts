@@ -1,6 +1,6 @@
 /**
  * Configuration for the database connection.
-*/
+ */
 export interface ConfigDBData {
   type: string;
   user: string;
