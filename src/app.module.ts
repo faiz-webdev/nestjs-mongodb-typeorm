@@ -1,10 +1,17 @@
-import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DatabaseModule } from './database/database.module';
-import ContactEntity from './entities/contact';
+import UserEntity from './entities/User';
+import CommentEntity from './entities/Comment';
+import PostEntity from './entities/Post';
+
 @Module({
-  imports: [DatabaseModule.forRoot({ entities: [ContactEntity] })],
+  imports: [
+    DatabaseModule.forRoot({
+      entities: [UserEntity, CommentEntity, PostEntity],
+    }),
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

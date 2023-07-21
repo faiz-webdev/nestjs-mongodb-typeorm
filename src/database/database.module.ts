@@ -13,7 +13,7 @@ export class DatabaseModule {
     dbconfig: DbConfig,
   ): TypeOrmModuleOptions {
     const dbdata = config.get().db;
-    console.log(config);
+    console.log('config: ', config);
     let connectionOptions: TypeOrmModuleOptions;
 
     if (!dbdata) {

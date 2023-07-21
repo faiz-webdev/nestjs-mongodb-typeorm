@@ -28,6 +28,7 @@ export class ConfigService {
   }
 
   private parseDbConfigFromEnv(env: NodeJS.ProcessEnv): ConfigDBData {
+    console.log("parseDbConfig")
     return {
       type: env.DB_TYPE || '',
       user: env.MYSQL_USER || '',
