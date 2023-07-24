@@ -4,9 +4,11 @@ import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { HttpExceptionFilter } from './http-exception.filter';
 import { LoggingInterceptor } from './logging.interceptor';
 import { UserService } from './user.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import UserEntity from 'src/entities/User';
 
 @Module({
-  imports: [],
+  imports: [TypeOrmModule.forFeature([UserEntity])],
   providers: [
     UserService,
     {

@@ -5,11 +5,14 @@ import {
   Entity,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import UserEntity from './User';
 import CommentEntity from './Comment';
+import CategoryEntity from './Category';
+import TagEntity from './Tag';
 
 @Entity('Post')
 class PostEntity {
@@ -41,6 +44,12 @@ class PostEntity {
 
   @OneToMany(()=> CommentEntity, comment=>comment.post)
   public comments: CommentEntity[];
+
+  @OneToOne(() => CategoryEntity, category => category.post)
+  public category: CategoryEntity;
+
+  @OneToMany(() => TagEntity, tag => tag.post)
+  public tags: TagEntity[];
 }
 
 export default PostEntity;

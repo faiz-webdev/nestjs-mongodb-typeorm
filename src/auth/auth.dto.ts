@@ -18,8 +18,8 @@ export class RegisterDTO {
   @ApiProperty()
   password: string;
 
-  @ApiProperty()
-  seller?: boolean;
+  // @ApiProperty()
+  // seller?: boolean;
 
   @ApiProperty()
   address?: Address;
