@@ -76,3 +76,6 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 
 ## Typeorm package
   npm i @nestjs/typeorm typeorm mysql2
+
+## Run migrations
+  npm run db:sync

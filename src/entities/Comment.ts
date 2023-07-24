@@ -6,7 +6,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity()
+@Entity('Comment')
 class CommentEntity {
   @PrimaryGeneratedColumn()
   public id: number;

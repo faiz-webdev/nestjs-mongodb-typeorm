@@ -21,6 +21,7 @@ export class DatabaseModule {
     }
     switch (dbdata.type) {
       case 'mysql':
+        console.log('connectionOptions: mysql');
         connectionOptions = this.getConnectionOptionsMysql(dbdata);
         break;
       default:
@@ -51,8 +52,8 @@ export class DatabaseModule {
       database: dbdata.name,
       charset: dbdata.charset,
       extra: {
-        collate: dbdata.collate,
-        dialect: dbdata.dialect,
+        // collate: dbdata.collate,
+        // dialect: dbdata.dialect,
       },
     };
   }
