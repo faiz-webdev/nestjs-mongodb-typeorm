@@ -26,10 +26,10 @@ class PostEntity {
   title: string;
 
   @Column()
-  subtitle: string;
+  public url: string;
 
   @Column()
-  description: string;
+  public text: string;
 
   @Column()
   @CreateDateColumn()

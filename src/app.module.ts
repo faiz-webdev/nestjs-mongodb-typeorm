@@ -7,12 +7,15 @@ import CommentEntity from './entities/Comment';
 import PostEntity from './entities/Post';
 import TagEntity from './entities/Tag';
 import CategoryEntity from './entities/Category';
+import { AuthModule } from './auth/auth.module';
+import { PostModule } from './post/post.module';
 
 @Module({
   imports: [
     DatabaseModule.forRoot({
       entities: [UserEntity, CommentEntity, PostEntity, TagEntity, CategoryEntity],
     }),
+    AuthModule, PostModule
   ],
   controllers: [AppController],
   providers: [AppService],

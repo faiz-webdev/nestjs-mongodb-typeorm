@@ -19,7 +19,7 @@ class UserEntity {
   @PrimaryGeneratedColumn()
   public id: number;
 
-  @Column({nullable: false})
+  @Column({nullable: true})
   name: string;
 
 //   @PrimaryColumn()
