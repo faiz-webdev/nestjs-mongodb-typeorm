@@ -5,13 +5,11 @@ import {
   BadRequestException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
 import * as bcrypt from 'bcrypt';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { LoginDTO, RegisterDTO } from '../auth/auth.dto';
 import { Repository } from 'typeorm';
-import User from '../entities/User';
 import UserEntity from '../entities/User';
 
 @Injectable()
@@ -21,14 +19,14 @@ export class UserService {
   ) {}
 
   // user register
-  async create(userDTO: RegisterDTO): Promise<User> {
+  async create(userDTO: RegisterDTO): Promise<UserEntity> {
     try {
       const { username, password } = userDTO;
       const user = await this.userRepo.findOne({ username });
       if (user) {
         throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
       }
-      const newUser = new User();
+      const newUser = new UserEntity();
       newUser.username = username;
       newUser.password = password;
       newUser.hashPassword();
@@ -42,7 +40,7 @@ export class UserService {
     }
   }
 
-  async findByUserName(username: string): Promise<User> {
+  async findByUserName(username: string): Promise<UserEntity> {
     try {
       const user = await this.userRepo.findOne({ username });
       if (user) {
@@ -70,7 +68,7 @@ export class UserService {
     }
   }
 
-  sanitizeUser(user: User) {
+  sanitizeUser(user: UserEntity) {
     const obj = { ...user };
     delete obj['password'];
     return obj;

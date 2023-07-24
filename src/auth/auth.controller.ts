@@ -17,7 +17,6 @@ export class AuthController {
     const user = await this.userService.findByLogin(userDTO);
     const payload: Payload = {
       username: user.username,
-      seller: user.seller,
     };
     const token = await this.authService.signPayload(payload);
     return { token };
@@ -28,7 +27,6 @@ export class AuthController {
     const user = await this.userService.create(userDTO);
     const payload: Payload = {
       username: user.username,
-      seller: user.seller,
     };
     const token = await this.authService.signPayload(payload);
     return { token };
