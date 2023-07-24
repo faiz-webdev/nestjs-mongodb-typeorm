@@ -2,10 +2,13 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryColumn,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import PostEntity from './Post';
+import CommentEntity from './Comment';
 
 @Entity('User')
 class UserEntity {
@@ -35,6 +38,12 @@ class UserEntity {
   @Column()
   @UpdateDateColumn()
   public updatedAt: Date;
+
+  @OneToMany(()=>PostEntity, post=>post.user)
+  public posts: PostEntity[];
+
+  @OneToMany(()=>CommentEntity, comment=>comment.user)
+  public comments: CommentEntity[];
 }
 
 export default UserEntity;
